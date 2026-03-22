@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+from sklearn.metrics import accuracy_score, f1_score 
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -10,9 +10,34 @@ from sklearn.neural_network import MLPClassifier
 from mrmr import mrmr_classif
 
 # Load data
-df = pd.read_csv("diabetes.csv")
-X, y = df.drop("target", axis=1), df["target"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+df = pd.read_csv("data/diabetes.csv")
+X, y = df.drop("diabetes", axis=1), df["diabetes"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, stratify=y, random_state=42)
+
+# X_train_df = pd.DataFrame(X_train, columns=X_train.columns)
+# sel_feats = mrmr_classif(X_train_df, y_train, K=5, method="MID")
+
+
+
+
+
+
+
+X_train = pd.get_dummies(X_train, columns=['gender'])
+X_test = pd.get_dummies(X_test, columns=['gender'])
+
+X_train = pd.get_dummies(X_train, columns=['smoking_history'])
+X_test = pd.get_dummies(X_test, columns=['smoking_history'])
+
+# Align test columns with train columns (important!)
+X_test = X_test.reindex(columns=X_train.columns, fill_value=0)
+
+# After encoding and aligning
+X_train_df = pd.DataFrame(X_train, columns=X_train.columns)
+sel_feats = mrmr_classif(X_train_df, y_train, K=5, method="MID")
+
+
 scaler = StandardScaler(); X_train, X_test = scaler.fit_transform(X_train), scaler.transform(X_test)
 
 # MRMR features
