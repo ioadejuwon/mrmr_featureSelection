@@ -1,3 +1,4 @@
+#Import Libraries
 import pandas as pd
 import numpy as np
 
@@ -10,36 +11,23 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
+print("Libraries imported successfully.")
 
-
-# -----------------------------
 # LOAD DATA
-# -----------------------------
-df = pd.read_csv("data/1/test.csv")
+df = pd.read_csv("data/1/train.csv")
 
 X = df.iloc[:, :-1]
 y = df.iloc[:, -1]
 
+# CHECK MISSING VALUES
+print("Missing values per column:\n")
+print(X.isnull().sum())
 
-# -----------------------------
-# HANDLE MISSING VALUES
-# -----------------------------
-
-# OPTION 1: Fill with global mean (simple)
-X = X.fillna(X.mean())
-
-# OPTION 2 (Better): Fill using class-wise mean
-# Uncomment this instead if you prefer
-"""
-for col in X.columns:
-    if X[col].isnull().sum() > 0:
-        X[col] = X.groupby(y)[col].transform(lambda x: x.fillna(x.mean()))
-"""
+print("Columns:" + str(X.columns.tolist()))
+print("Number of duplicated rows: " + str(df.duplicated().sum()))
 
 
-# -----------------------------
 # MODELS + PARAMS
-# -----------------------------
 models = {
     "SVM": (
         SVC(),
@@ -82,30 +70,35 @@ models = {
 }
 
 
-# -----------------------------
+
 # 10-FOLD CV
 # -----------------------------
 kf = KFold(n_splits=10, shuffle=True, random_state=42)
-
 results = {name: {"acc": [], "f1": []} for name in models.keys()}
 
-
 for fold, (train_idx, val_idx) in enumerate(kf.split(X), 1):
-    print(f"\n--- Fold {fold} ---")
+    print(f"\nFold {fold}")
     
-    X_train, X_val = X.iloc[train_idx], X.iloc[val_idx]
+    X_train, X_val = X.iloc[train_idx].copy(), X.iloc[val_idx].copy()
     y_train, y_val = y.iloc[train_idx], y.iloc[val_idx]
 
-    # Scale inside fold
+    # MISSING VALUE IMPUTATION (inside fold, no leakage)
+    for col in X_train.columns:
+        # Use global mean (simpler & safe)
+        mean_val = X_train[col].mean()
+        X_train[col] = X_train[col].fillna(mean_val)
+        X_val[col] = X_val[col].fillna(mean_val)
+
+    # SCALE DATA (inside fold)
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_val = scaler.transform(X_val)
 
+    # TRAIN MODELS WITH NESTED CV
     for name, (model, params) in models.items():
-        
         grid = GridSearchCV(model, params, cv=3, scoring='f1_macro')
         grid.fit(X_train, y_train)
-        
+
         best_model = grid.best_estimator_
         y_pred = best_model.predict(X_val)
 
@@ -115,13 +108,11 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(X), 1):
         results[name]["acc"].append(acc)
         results[name]["f1"].append(f1)
 
-        print(f"{name} | Acc: {acc:.4f} | F1: {f1:.4f}")
+        print(f"{name} | Acc: {acc:.4f} | F1: {f1:.4f} | Best Params: {grid.best_params_}")
 
 
-# -----------------------------
-# FINAL RESULTS
-# -----------------------------
-print("\n\n=== FINAL RESULTS (Mean ± Std) ===")
+
+print("RESULTS (Mean ± Std)")
 
 for name in models.keys():
     acc_mean = np.mean(results[name]["acc"])
