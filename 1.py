@@ -112,7 +112,7 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(X), 1):
 
 
 
-print("RESULTS (Mean ± Std)")
+print("RESULTS Main (Mean ± Std)")
 
 for name in models.keys():
     acc_mean = np.mean(results[name]["acc"])
