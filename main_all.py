@@ -3,9 +3,8 @@ MRMR Feature Selection Coursework Project
 Author: Isaac and Zhanyi
 """
 
-# ==========================
 # Imports
-# ==========================
+
 
 import pandas as pd
 import numpy as np
@@ -20,9 +19,8 @@ from mrmr import mrmr_classif
 print("MRMR is working...")
 
 
-# ==========================
 # Configuration
-# ==========================
+
 
 DATA_PATH = "data/1/train.csv"   # change to your dataset
 TARGET_COLUMN = "label"     # change if needed
@@ -31,16 +29,14 @@ RANDOM_STATE = 42
 K_FEATURES = 5               # number of features to select
 
 
-# ==========================
 # Load Data
-# ==========================
+
 
 print("Loading dataset...")
 df = pd.read_csv(DATA_PATH)
 
 X = df.drop(columns=[TARGET_COLUMN])
 y = df[TARGET_COLUMN]
-
 # Train-test split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
@@ -48,7 +44,6 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=RANDOM_STATE,
     stratify=y
 )
-
 # Scale features (important for logistic regression)
 scaler = StandardScaler()
 X_train_scaled = pd.DataFrame(
@@ -61,9 +56,8 @@ X_test_scaled = pd.DataFrame(
 )
 
 
-# ==========================
 # Baseline Model (All Features)
-# ==========================
+
 
 print("\nRunning Baseline Model (All Features)...")
 
@@ -85,9 +79,8 @@ baseline_results = {
 }
 
 
-# ==========================
 # MRMR Feature Selection
-# ==========================
+
 
 print("\nRunning MRMR Feature Selection...")
 
@@ -103,9 +96,8 @@ X_train_mrmr = X_train_scaled[selected_features]
 X_test_mrmr = X_test_scaled[selected_features]
 
 
-# ==========================
 # Model with MRMR Features
-# ==========================
+
 
 print("\nTraining Model with MRMR Features...")
 
@@ -127,9 +119,8 @@ mrmr_results = {
 }
 
 
-# ==========================
 # Performance Comparison
-# ==========================
+
 
 print("\n==============================")
 print("Performance Comparison")
