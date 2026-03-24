@@ -1,0 +1,6 @@
+Model,Accuracy,F1 Score,Best Params
+SVM,0.9058 ± 0.0527,0.5410 ± 0.2773,"{'C': 10, 'gamma': 'scale', 'kernel': 'rbf'}"
+KNN,0.9100 ± 0.0586,0.5433 ± 0.2765,"{'n_neighbors': 3, 'weights': 'distance'}"
+DT,0.9157 ± 0.0642,0.5839 ± 0.3099,"{'max_depth': None, 'min_samples_split': 2}"
+RF,0.9163 ± 0.0638,0.5846 ± 0.3097,"{'max_depth': None, 'min_samples_split': 2, 'n_estimators': 100}"
+MLP,0.9122 ± 0.0601,0.5637 ± 0.2993,"{'alpha': 0.001, 'hidden_layer_sizes': (100, 50), 'learning_rate_init': 0.001}"

@@ -14,5 +14,15 @@ __pycache__/
 1old.py
 data/
 
+notebooks/1-1.ipynb
+notebooks/1-2.ipynb
+notebooks/2-1.ipynb
+notebooks/3-1.ipynb
+notebooks/4-1.ipynb
+
+1-1.py
+1.py
+main_all.py
+
 mrmr_experiments.ipynb
 .gitignore

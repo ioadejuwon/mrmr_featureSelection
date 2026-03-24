@@ -1,11 +1,4 @@
-# =========================================================
-# Baseline experiment (NO mRMR)
-# Leakage-safe nested CV version
-# =========================================================
-
-# =========================
 # 1. Import libraries
-# =========================
 import warnings
 import numpy as np
 import pandas as pd
@@ -27,10 +20,8 @@ warnings.filterwarnings("ignore")
 print("Libraries imported successfully.")
 
 
-# =========================
 # 2. Configuration
-# =========================
-DATA_PATH = "data/1/train.csv"   # You are currently testing dataset 1
+DATA_PATH = "data/1/train.csv"
 OUTER_SPLITS = 10
 INNER_SPLITS_PREFERRED = 3
 RANDOM_STATE = 42
@@ -206,9 +197,7 @@ if DEBUG_REMOVE_SUSPICIOUS_FEATURES:
     print("New feature shape after debug-only removal:", X.shape)
 
 
-# =========================
 # 6. Models and parameter grids
-# =========================
 models = {
     "SVM": (
         SVC(),
@@ -259,9 +248,7 @@ models = {
 }
 
 
-# =========================
 # 7. Outer 10-fold CV
-# =========================
 outer_cv = StratifiedKFold(
     n_splits=OUTER_SPLITS,
     shuffle=True,
@@ -339,9 +326,7 @@ for fold, (train_idx, val_idx) in enumerate(outer_cv.split(X, y), start=1):
         )
 
 
-# =========================
 # 8. Summary
-# =========================
 print("\n===== RESULTS (Mean ± Std) =====")
 
 summary_rows = []
