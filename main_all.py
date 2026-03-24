@@ -1,6 +1,6 @@
 """
 MRMR Feature Selection Coursework Project
-Author: Your Name
+Author: Isaac and Zhanyi
 """
 
 # ==========================
@@ -24,8 +24,8 @@ print("MRMR is working...")
 # Configuration
 # ==========================
 
-DATA_PATH = "diabetes.csv"   # change to your dataset
-TARGET_COLUMN = "target"     # change if needed
+DATA_PATH = "data/1/train.csv"   # change to your dataset
+TARGET_COLUMN = "label"     # change if needed
 TEST_SIZE = 0.2
 RANDOM_STATE = 42
 K_FEATURES = 5               # number of features to select
