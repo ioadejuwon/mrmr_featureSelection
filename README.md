@@ -1,7 +1,7 @@
 # MRMR
 
 ## Overview
-A machine learning project focused on feature selection and ranking.
+A machine learning project focused on feature selection and ranking by Isaac and Zhanyi.
 
 ## Getting Started
 
